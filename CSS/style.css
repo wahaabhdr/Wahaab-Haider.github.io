@@ -1,0 +1,101 @@
+html, body{
+    margin: 0;
+    padding: 100;
+}
+
+.main-header-1{
+    background-color: rgb(255, 255, 255);
+    background-image: url(../images/Badshahi\ mousque.jpg);
+    background-size: cover;
+    padding-bottom: 60px;
+    padding-top: 450px;
+}    
+
+.main-header-2{
+    background-color: rgb(255, 255, 255);
+    background-image: url(../images/Green\ sky.jpg);
+    background-size: cover;
+    padding-bottom: 180px;
+    padding-top: 180px;
+    
+}    
+
+.main-header-3{
+    background-color: rgb(255, 255, 255);
+    background-image: url(../images/blue\ mousqe2.jpg);
+    background-size: cover;
+    padding-bottom: 180px;
+    padding-top: 180px;
+}    
+
+.main-header-4{
+    background-color: rgb(255, 255, 255);
+    background-image: url(../images/Chanel.jpg);
+    background-size: cover;
+    padding-bottom: 180px;
+    padding-top: 180px;
+}    
+
+.nav{
+    top: 0;
+    position: fixed;
+    /*Tilpasser containers bredde, så knappene havner i midten*/
+    width: 100%;
+    text-align: center;
+   }
+
+
+.nav ul{
+    margin: 0;
+}
+
+.nav li{
+    display: inline;
+} 
+
+.nav a{
+    display: inline-block;
+    color: whitesmoke;
+    text-decoration: none;
+    padding: 0,5em;
+    
+}
+
+.nav a:hover{ 
+    color: rgb(0, 0, 0);
+    /* fader ut en gradient */
+    background-image: linear-gradient (rgba(0 255, 255, 1), rgba(0, 0, 0, ));
+}
+
+
+
+
+.main-nav{
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.about-band-image{
+    float: inline-end;
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    margin: 15px;
+
+}
+
+.about-rest-image{
+    float: inline-end;
+    height: 200px;
+    width: 300px;
+    border-radius: 10%;
+    margin: 15px;
+}
+
+.container{
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5em;
+}
+
