@@ -1,0 +1,102 @@
+/**
+ * @file
+ * Behaviors for the Podcast.
+ */
+!function (Drupal, $) {
+  'use strict';
+
+  Drupal.behaviors.podcast = {
+    attach: function attach(context) {
+      var player = new Plyr('#podcast-player');
+      var active = null; // set click event on play icon
+
+      $('.play-button', context).on('click', function () {
+        var podcastUrl = $(this).parents('.episodes__play').data('podcast');
+        var id = $(this).parents('.episodes__play').data('id');
+        setSource('play', podcastUrl, id); // display player
+
+        $('.player__section').addClass('active');
+      });
+      $('.pause-button').on('click', function () {
+        var id = $(this).parents('.episodes__play').data('id');
+        setSource('pause', {}, id);
+      });
+
+      var setSource = function setSource(status, url, id) {
+        if (active !== id) {
+          active = id;
+          player.source = {
+            type: 'audio',
+            title: 'AHO Podcasts',
+            sources: [{
+              src: url,
+              type: 'audio/mp3'
+            }]
+          };
+          player.id = id;
+        }
+
+        if (status === 'play') {
+          player.play();
+        } else {
+          player.pause();
+        }
+      };
+
+      $('.player__section .aho-navigation__button-active').on('click', function () {
+        $('.player__section').removeClass('active');
+        player.stop();
+        $('.pause-button').addClass('hidden');
+        $('.play-button').removeClass('hidden');
+      }); // set event on play button on player
+
+      player.on('play', function (data) {
+        return showPause(data);
+      });
+      player.on('pause', function (data) {
+        return showPlay(data);
+      });
+
+      var showPause = function showPause(data) {
+        var id = data.detail.plyr.id;
+        var el = findElementBasedOnId(id);
+        var playButton = el.querySelector('.play-button');
+        var pauseButton = el.querySelector('.pause-button');
+
+        if (playButton) {
+          playButton.classList.add('hidden');
+        }
+
+        if (pauseButton) {
+          pauseButton.classList.remove('hidden');
+        }
+      };
+
+      var showPlay = function showPlay(data) {
+        var id = data.detail.plyr.id;
+        var el = findElementBasedOnId(id);
+        var playButton = el.querySelector('.play-button');
+        var pauseButton = el.querySelector('.pause-button');
+
+        if (playButton) {
+          playButton.classList.remove('hidden');
+        }
+
+        if (pauseButton) {
+          pauseButton.classList.add('hidden');
+        }
+      };
+
+      function findElementBasedOnId(id) {
+        var el;
+        $('.view-podcast-archive.view-display-id-podcast_episode .views-row').each(function (index, item) {
+          if ($(item).find('.episodes__play').data('id') === id) {
+            el = item;
+          }
+        });
+        return el;
+      }
+    }
+  };
+}(Drupal, jQuery);
+//# sourceMappingURL=podcast.js.map

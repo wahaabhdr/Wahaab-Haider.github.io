@@ -1,0 +1,16 @@
+/**
+ * @file
+ * Behaviors for the fitvid.
+ */
+!function (Drupal, $) {
+  'use strict';
+
+  Drupal.behaviors.fitvid = {
+    attach: function attach(context) {
+      if ($('iframe', context).length) {
+        fitvids();
+      }
+    }
+  };
+}(Drupal, jQuery);
+//# sourceMappingURL=fitvid-behaviors.js.map

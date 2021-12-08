@@ -1,0 +1,42 @@
+/**
+ * @file
+ * Modal functionality.
+ */
+!function (Drupal, $) {
+  'use strict';
+
+  var windowWidth = $(window).width();
+  var timeline = $('.paragraph--type--timeline-content');
+  timeline.on('click', function (e) {
+    e.preventDefault();
+  }); // add all the elements inside modal which you want to make focusable
+
+  if (windowWidth >= 768) {
+    // Add modal opening handler.
+    timeline.on('click', function () {
+      $(this).siblings('.modal').show().addClass('modal-overlay').attr('tabindex', '1');
+      $(this).siblings('.modal .modal__container').focus();
+    }); // Add modal close handler.
+
+    $('.modal__close').on('click', function () {
+      $(this).parents('.modal').hide().removeClass('modal-overlay').attr('tabindex', '-1');
+    }); // Close the modal, when the user clicks anywhere outside of the modal.
+
+    $(window).on('click', function (e) {
+      if ($(e.target).hasClass('modal')) {
+        $('.modal').hide();
+      }
+    }); // Add prev handler.
+
+    $('.modal__arrow--prev').on('click', function () {
+      $(this).parents('.modal').hide();
+      $(this).parents('.field__item').prev('.field__item').find('.modal').show().addClass('modal-overlay');
+    }); // Add prev handler.
+
+    $('.modal__arrow--next').on('click', function () {
+      $(this).parents('.modal').hide();
+      $(this).parents('.field__item').next('.field__item').find('.modal').show().addClass('modal-overlay');
+    });
+  }
+}(Drupal, jQuery);
+//# sourceMappingURL=modal.js.map

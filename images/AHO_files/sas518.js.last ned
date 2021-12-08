@@ -1,0 +1,328 @@
+// (function(jav) 
+// {
+// 	Drupal.behaviors.responsiveBartikCollapsibleMenu = {
+// 	    attach: function (context, settings) 
+// 	    {
+// 			jav('.toggle-menu').click(function()
+// 			{
+// 				jav('#menu').toggleClass('show');
+// 				jav('body').toggleClass('sf');
+// 				jav(this).children('i').toggleClass();
+// 			});
+// 	    }
+// 	}
+	
+// 	String.prototype.replaceAll = function (find, replace) {
+// 	    var str = this;
+// 	    return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
+// 	};
+// 	hook_users = {
+// 		rm_hook: false,	
+// 		lang_code: (jQuery(location).attr('href').indexOf('/en/') !== -1) ? 'en' : 'no',
+// 		def_ldap_disabled: [ 'name', 'mail', 'field_name','field_firstname','field_lastname','field_name_to_be_shown','field_mobile_number','field_title_no','field_title_en','field_telephone','field_org_department_en','field_org_department_no','field_mail_address'],
+// 		tab: function() 
+// 		{
+// 			if (this.rm_hook) return false;
+			
+// 			if (jav('#user-profile-form').length || jav('.pane-user-field-picture-high-resolution').length || jav('.pane-user-picture').length || jav('#user-panel').length)
+// 			{
+// 				jav(".tabs li:nth-child(2) a ").html('English');	  
+// 				url = jav(".tabs li:nth-child(2) a").attr('href'); 
+// 				if (jav(".tabs li:nth-child(2) a").length)
+// 				{
+// 					jav(".tabs li:nth-child(2)").after('<li><a href="' + url.replace('/en/', '/no/') + '">Norsk</a></li>');
+// 					jav(".tabs li:nth-child(2) a").attr('href', jav(".tabs li:nth-child(2) a ").attr('href').replace('/no/', '/en/')); 
+					
+// 					if (jQuery(location).attr('href').indexOf('/no/') !== -1 && jQuery(location).attr('href').indexOf('/edit') !== -1) 
+// 					{
+// 						jav(".tabs li:nth-child(3)").addClass( "active" );
+// 						jav(".tabs li:nth-child(2)").removeClass( "active" );
+						  
+// 						jav(".tabs li:nth-child(3) a").addClass( "active" );
+// 						jav(".tabs li:nth-child(2) a").removeClass( "active" );
+// 					}
+// 				}				
+// 			}
+// 		},
+// 		view: function() 
+// 		{
+// 			if (this.rm_hook) return false;
+			
+// 			// hook to repair mobile number for user view
+// 			panel = '.pane-user-';
+// 			rm_hide_mobile_number = jav(panel + 'field-hide-mobile-number div div div div'); 
+// 			if (jQuery.trim(rm_hide_mobile_number.html()) != '')
+// 			{
+// 				jav(panel + 'field-telephone').remove();		  
+// 			}
+// 			jav(panel + 'field-hide-mobile-number').remove();
+			
+// 			obj = jav( "#user-profile-form div div" );			
+// 			obj = jav( "#user-panel .pane-entity-field" );
+			
+// 			obj.each(function( ) 
+// 			{
+// 				//id = this.id;		
+				
+// 				id = jav(this).attr('class').split('pane-user-');
+// 				id = id[1];
+				
+// 				if (id.indexOf('-no') !== -1 || id.indexOf('-en') !== -1) 
+// 				{			  
+// 					rm_id = id; //this.id;
+					
+// 					if (jQuery(location).attr('href').indexOf('/en/') !== -1) 
+// 					{
+// 						rm_id = rm_id.replace('-en', '-no');
+// 						jav(panel + rm_id).remove();
+// 					}	
+// 					else if (jQuery(location).attr('href').indexOf('/no/') !== -1) 
+// 					{
+// 						rm_id = rm_id.replace('-no', '-en');
+// 						jav(panel + rm_id).remove();
+// 					}	
+// 					//console.log(rm_id);
+// 				}		
+// 			});
+			
+// 			if (jav('.pane-bundle-text h2').length)
+// 			{
+// 				title = jav('.pane-bundle-text h2').html().split(':');
+// 				jav('.pane-bundle-text h2').html(title[0]);
+// 				jav('.pane-bundle-text .pane-content div').html(title[1])
+// 			}
+			
+// 			if (jav('.field-name-field-title-' + this.lang_code + ' div div').length && jQuery(location).attr('href').indexOf('/edit') == -1)
+// 			{
+// 				title = jav('.field-name-field-corrected-title-' + this.lang_code + ' div div').html();
+// 				if (jQuery.trim(title) != '')
+// 				{
+// 					jav('.field-name-field-title-' + this.lang_code + ' div div').html(title);
+// 					jav('.pane-user-field-corrected-title-' + this.lang_code + '').hide();
+// 				}
+// 			}
+// 			if (jav('.field-name-field-picture-with-high-resoluti a').length && jQuery(location).attr('href').indexOf('/edit') == -1)
+// 			{
+// 				jav('.field-name-field-picture-with-high-resoluti div div a').attr('target','_blank');
+// 				jav('.field-name-field-picture-with-high-resoluti div div a').html(jav('.field-name-field-picture-with-high-resoluti .field-label').html().replace(':', ''));
+// 				jav('.field-name-field-picture-with-high-resoluti .field-label').remove();
+// 			}
+// 			if (jQuery(location).attr('href').indexOf('/edit') == -1 ) 
+// 			{
+// 				jav('.pane-entity-field').each(function( ) 
+// 				{
+// 					cls_name = jav(this).attr('class').replace('panel-pane pane-entity-field ', '');
+// 					//console.log(cls_name);
+// 					//console.log(jav('.' + cls_name + ' div div div div').html());
+// 					if (jQuery.trim(jav('.' + cls_name + ' div div div div').html()) == '') jav('.' + cls_name).remove();					
+// 				});
+// 			}
+// 		},
+// 		form: function() 
+// 		{			
+// 			//alert(tmp.toSource());
+// 			if (this.rm_hook) return false;
+			
+// 			panel = 'panels-ipe-'; 
+// 			obj = jav('#' + panel + 'regionid-contentmain .' + panel + 'sort-container .' + panel + 'portlet-wrapper' );
+// 			obj = jav('#user-profile-form div div' );
+// 			obj.each(function( ) 
+// 			{
+// 				class_name = this.id;//jav('#' + this.id + ' .' + panel + 'portlet-content div').attr('class');
+				
+// 				//console.log(class_name)
+// 				if (
+// 					(jQuery(location).attr('href').indexOf('/no/') !== -1 && class_name.indexOf('-en') !== -1) || 
+// 					(jQuery(location).attr('href').indexOf('/en/') !== -1 && class_name.indexOf('-no') !== -1)
+// 				) {
+// 					jav('#' + this.id).hide();
+// 				}
+// 			});
+			
+// 			jav('#edit-locale').hide();
+// 			jav('#edit-contact').hide();
+// 			jav('#edit-timezone').hide();
+			
+// 			if (jav('.form-item-mail').length) jav('.form-item-name').before(jav('.form-item-mail').before());
+			
+// 			//console.log(jQuery.base64.decode(jav('#uproles').val()));
+			
+// 			if (jQuery.base64.decode(jav('#uproles').val()).indexOf('Student') !== -1 && jQuery(location).attr('href').indexOf('/edit') !== -1 ) 
+// 			{
+// 				//jav('.group-numberone').hide();
+// 				jav.each(['numbertwo', 'groupthree'], function( ind, item ) 
+// 				{  
+// 					jav('.group-' + item + ' .fieldset-wrapper div').each(function( ) 
+// 					{
+// 						if (this.id.indexOf('user-picture') == -1 && this.id.indexOf('area-of-expertise') == -1 && this.id.indexOf('introduction') == -1 && this.id.indexOf('related-projects') == -1)
+// 						jav('#' + this.id).hide();
+// 					});
+// 				});
+// 				jav('.group-fourth').hide();
+// 			}
+// 		}, 
+// 		// Lock data from LDAP in user form
+// 		disable: function()
+// 		{			
+// 			if (this.rm_hook) return false;
+			
+// 			class_item = '.form-item-';
+// 		    id_name = '#user-profile-form';   
+// 		    if (jav(id_name).length)// && parseInt(jQuery.base64.decode(jav('#uldap').val())) == 1)
+// 		    {     
+// 		    	jav.each(this.def_ldap_disabled, function( ind, item ) 
+// 			    {     
+// 			    	item = item.replaceAll('_', '-');
+// 	                item += (item === 'name' || item === 'mail') ? '' : '-und-0-value';
+	                
+// 	                jav(id_name + ' ' + class_item + item + ' label').after('&nbsp;&nbsp;<span id="txt-' + class_item.replace('.', '') + item + '">' + jav(id_name + ' #edit-' + item).val() + '</span>');
+// 	                jav(id_name + ' ' + class_item + item + ' label').after('<strong>' + jav(id_name + ' ' + class_item + item + ' label').html() + ':</strong>');
+	
+// 	                jav(id_name + ' #edit-' + item).hide();//.remove();
+// 	                jav(id_name + ' ' + class_item + item + ' label').hide();
+// 	                jav(id_name + ' ' + class_item + item + ' .description').hide();
+// 	                jav(id_name + ' ' + class_item + item + ' .form-required').hide();
+	                
+// 			    });	    
+// 			    jav(id_name + ' ' + class_item + 'current-pass').hide();
+// 			    jav(id_name + ' ' + class_item + 'pass').hide();
+// 			    //jav(class_item + 'roles').remove();
+// 		   }	
+// 		},
+// 		setData: function(item, is_input)
+// 		{
+// 			obj = jav('#edit-field-' + item + '-en-und-0-value');
+// 			el_en = (is_input) ? obj.val() : obj.html();
+			
+// 			obj = jav('#edit-field-' + item + '-no-und-0-value')
+// 			el_no = (is_input) ? obj.val() : obj.html();
+			
+// 			if (jQuery.trim(el_no) == '')
+// 			{
+// 				el_en = this.decodeHtmlEntity(el_en);
+// 				el_en = el_en.replaceAll('<p><p>', '<p>');
+// 				el_en = el_en.replaceAll('</p></p>', '</p>');
+				
+// 				obj = jav('#edit-field-' + item + '-no-und-0-value');
+// 				(is_input)  ? obj.val(el_en) : obj.html(el_en);
+				
+// 				(is_input) ? '' :jav("#edit-field-" + item + "-no-und-0-value_ifr").contents().find("html").html(el_en);
+// 			}		
+// 		},
+// 		decodeHtmlEntity: function(str) {
+// 			/*Firefox (and IE if the string contains no elements surrounded by angle brackets )*/
+// 			  try{
+// 				  var ta=document.createElement("textarea");
+// 				  ta.innerHTML=str;
+// 				  return ta.value;
+// 			  }catch(e){};
+// 			/*Internet Explorer*/
+// 			  try{
+// 				  var d=document.createElement("div");
+// 				  d.innerHTML=str.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+// 				  if(typeof d.innerText!="undefined") return d.innerText;/*Sadly this strips tags as well*/
+// 			  }catch(e){}
+// 			}, 
+// 		process: function() 
+// 		{
+// 			this.tab();		
+// 			this.view();
+// 			this.form();
+// 			this.disable();
+// 		}, 
+// 	}
+	
+// 	header = {
+// 		search: function(w, type) 
+// 		{
+// 			 jav('#block-search-form').css('width', w + 'px');
+			  
+// 			 obj = jav('#search-block-form .form-item-search-block-form input');
+// 			 (type) ? obj.show() : obj.hide();
+// 		},
+// 		tab_menu_study_program: function()
+// 		{
+//             //get latest year
+//             var currentUrl = jQuery(location).attr('href');
+            
+//             if (currentUrl.indexOf('/no/') !== -1){
+//                 baseUrl = currentUrl.split("/no/",1);
+//             } else {
+//                 baseUrl = currentUrl.split("/en/",1);
+//             }
+//             baseUrl = baseUrl[0];
+             
+            
+//             jQuery.get(baseUrl+'/study_plan.tmp', function(latestYear) {
+//                if (!latestYear){
+//                    latestYear = '2014';
+//                }
+               
+//                 jav.each(['ark', 'ide', 'ul'], function( ind, item ) 
+//                 {   
+//                     cls_name = 'pane-menu-studies-' + item;
+//                     if ( jav( '.' + cls_name ).length ) 
+//                     {
+//                         jav( '.' + cls_name + ' h2').remove();					
+//                         jav( '.' + cls_name + ' div').removeClass( "pane-content" ).addClass( "tabs" );
+//                         jav( '.' + cls_name + ' ul').removeClass( "menu" ).addClass( "tabs primary" );
+
+//                         li0 = jav( '.' + cls_name + ' ul li:nth-child(1) a ');
+//                         var url0 = li0.prop('href');
+//                         var arrTmp = url0.split("/");
+//                         var spType = arrTmp[arrTmp.length-1];
+                        
+                        
+//                         li = jav( '.' + cls_name + ' ul li:nth-child(2) a ');
+//                         //li.html(li.html() + ' ' + latestYear);
+//                         li.html(li.html());
+//                         li.prop('href', li.prop('href') + '/' + latestYear + '/' + spType);
+
+//                         if (jQuery(location).attr('href').indexOf('/study-plan') !== -1)
+//                         {
+//                             jav( '.' + cls_name + ' ul li:nth-child(2) ').attr('class', 'active leaf');
+//                         }
+//                     }                
+//                 });	
+               
+//             },'text');
+            
+            
+  
+// 		},
+// 		init: function()
+// 		{
+// 			  jav('#block-locale-language .active').hide();
+			  
+// 			  this.search(34, false);
+// 			  jav('#main-menu').hide();
+			  
+// 			  jav('#search-block-form #edit-actions input').prop('type', 'button');
+// 			  jav('#search-block-form .form-item-search-block-form input').hide();
+			  
+// 			  this.tab_menu_study_program();
+// 		}
+// 	}
+	
+// 	jav(function() 
+// 	{
+// 		jav('#search-block-form #edit-actions input').click(function () 
+// 		{
+// 		  obj = jav('#search-block-form .form-item-search-block-form input'); 
+// 		  obj.is(':hidden') ? header.search(193, true) : header.search(34, false);
+// 	    });
+		
+// 		jav(window).bind("load", function() 
+// 		{
+// 			header.init();
+			
+// 			hook_users.process();	
+			
+// 			jav.each(['cv', 'introduction'], function( ind, item ){hook_users.setData(item, false);});
+// 			jav.each(['title', 'org-department'], function( ind, item ){hook_users.setData(item, true);});
+			
+// 			jav('.wysiwyg-processed :nth-child(1)').prop('selected', 'selected').trigger('change');
+// 		});
+		
+// 	});	
+// })(jQuery);

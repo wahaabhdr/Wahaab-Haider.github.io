@@ -1,0 +1,17 @@
+/**
+ * @file
+ * Behaviors for the Timeline.
+ */
+!function (Drupal, $) {
+  'use strict';
+
+  var windowWidth = $(window).width();
+
+  if (windowWidth < 768) {
+    $('.expand-icon').on('click', function () {
+      $(this).parent().next('.timeline-content__body').slideToggle();
+      $(this).toggleClass('expanded');
+    });
+  }
+}(Drupal, jQuery);
+//# sourceMappingURL=timeline.js.map

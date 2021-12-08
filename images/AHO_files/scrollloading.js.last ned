@@ -1,0 +1,207 @@
+var busy = false;
+
+(function (jQuery) {
+    var jQuerythis;
+
+    jQuery.fn.scrollPagination = function (options) {
+        var settings = {
+            nop: 4,
+            error: '',
+            delay: 500
+        };
+
+        // Extend the options so they work with the plugin
+        if (options) {
+            jQuery.extend(settings, options);
+        }
+
+        var baseUrl = jQuery('#baseUrl').val();
+        var uriRoot = baseUrl.replace("/en", "");
+        uriRoot = uriRoot.replace("/no", "");
+
+        // For each so that we keep chainability.
+        return this.each(function () {
+
+            // Some variables 
+            jQuerythis = jQuery(this);
+            jQuerysettings = settings;
+            busy = false; // Checks if the scroll action is happening 
+            // so we don't run it multiple times
+
+            // Append custom messages and extra UI
+            jQuerythis.append('<div id="content-inner"></div><div class="loading-bar" style="padding:20px;text-align:center;clear:both"></div>');
+
+            function Employees() {
+                var departments = '';
+                var area_of_expertise = '';
+                var unit = '';
+                if (jQuery("#filter_key").val() === 'area_of_expertise') {
+                    area_of_expertise = jQuery("#filter_val").val();
+                }
+                else if (jQuery("#filter_key").val() === 'unit') {
+                    unit = jQuery("#filter_val").val();
+                }
+                else {
+                    departments = jQuery("#filter_val").val();
+                }
+
+                if (jQuery('#employee_page').val()) {
+                    var employee_page = parseInt(jQuery('#employee_page').val()) + 4;
+
+                    jQuery('#employee_page').val(employee_page);
+
+                    var url = jQuery('#baseUrl').val() + '/member/ajax/employees/item?page=' + employee_page;
+                    if (area_of_expertise)
+                        url += '&area_of_expertise=' + area_of_expertise;
+                    else if (departments)
+                        url += '&departments=' + departments;
+                    else if (unit)
+                        url += '&unit=' + unit;
+
+                    jQuery.ajax({
+                        url: url,
+                        method: "get",
+                        dataType: "html"
+                    }).done(function (html) {
+                        if (jQuery.trim(html) === "") {
+                            jQuerythis.find('.loading-bar').remove();
+                            return;
+                        }
+
+                        jQuery("#content-inner").append(html);
+                        busy = false;
+                    });
+                } else {
+                    jQuerythis.find('.loading-bar').remove();
+                    return;
+                }
+            }
+
+            function Students() {
+                var employee_page = parseInt(jQuery('#employee_page').val()) + 4;
+
+                jQuery('#employee_page').val(employee_page);
+
+                var url = jQuery('#baseUrl').val() + '/member/ajax/student/item?page=' + employee_page;
+
+                jQuery.ajax({
+                    url: url,
+                    method: "get",
+                    dataType: "html"
+                }).done(function (html) {
+                    if (jQuery.trim(html) === "") {
+                        jQuerythis.find('.loading-bar').remove();
+                        return;
+                    }
+
+                    jQuery("#content-inner").append(html);
+
+                    busy = false;
+                });
+            }
+
+//            getData(false); // Run function initially
+            if (jQuery(window).scrollTop() + jQuery(window).height() > jQuerythis.height() && !busy) {
+                // Now we are working, so busy is true
+                busy = true;
+
+                // Tell the user we're loading posts
+                jQuerythis.find('.loading-bar').html('<img style="width:32px" src="' + uriRoot + '/sites/all/themes/AHO/images/loading.gif" />');
+
+                // Run the function to fetch the data inside a delay
+                // This is useful if you have content in a footer you
+                // want the user to see.
+                setTimeout(function () {
+                    if (jQuery(location).attr('href').indexOf('member/students') !== -1)
+                        Students();
+                    if (jQuery(location).attr('href').indexOf('member/employees') !== -1
+                        || jQuery(location).attr('href').indexOf('staff') !== -1
+                        || jQuery(location).attr('href').indexOf('ansattoversikt') !== -1)
+                        Employees();
+                }, jQuerysettings.delay);
+
+            }
+
+            jQuery(window).scroll(function () {
+
+                // Check the user is at the bottom of the element
+                if (jQuery(window).scrollTop() + jQuery(window).height() > jQuerythis.height() && !busy) {
+
+                    // Now we are working, so busy is true
+                    busy = true;
+
+                    // Tell the user we're loading posts
+                    jQuerythis.find('.loading-bar').html('<img style="width:32px" src="' + uriRoot + '/sites/all/themes/AHO/images/loading.gif" />');
+
+                    // Run the function to fetch the data inside a delay
+                    // This is useful if you have content in a footer you
+                    // want the user to see.
+                    setTimeout(function () {
+                        if (jQuery(location).attr('href').indexOf('member/students') !== -1)
+                            Students();
+                        if (jQuery(location).attr('href').indexOf('member/employees') !== -1
+                            || jQuery(location).attr('href').indexOf('staff') !== -1
+                            || jQuery(location).attr('href').indexOf('ansattoversikt') !== -1)
+                            Employees();
+                    }, jQuerysettings.delay);
+
+                }
+            });
+        });
+    };
+
+    filterEmployees = function (area_of_expertise, departments, unit) {
+        busy = false; // Checks if the scroll action is happening
+
+        if (area_of_expertise) {
+            jQuery("#filter_key").val('area_of_expertise');
+            jQuery("#filter_val").val(area_of_expertise);
+        } else if (departments) {
+            jQuery("#filter_key").val('departments');
+            jQuery("#filter_val").val(departments);
+        } else if (unit) {
+            jQuery("#filter_key").val('unit');
+            jQuery("#filter_val").val(unit);
+        }
+
+        var employee_page = parseInt(jQuery('#employee_page').val()) + 4;
+
+        jQuery("#employees-list .row").html('');
+        employee_page = 0;
+        jQuery('.loading').fadeIn();
+
+        jQuery('#employee_page').val(employee_page);
+
+        var url = jQuery('#baseUrl').val() + '/member/ajax/employees/item?page=' + employee_page;
+        if (area_of_expertise)
+            url += '&area_of_expertise=' + area_of_expertise;
+        else if (departments)
+            url += '&departments=' + departments;
+        else if (unit)
+            url += '&unit=' + unit;
+
+        jQuery.ajax({
+            url: url,
+            method: "get",
+            dataType: "html"
+        }).done(function (html) {
+            jQuery("#employees-list .row").append(html);
+            jQuery("#employees-list .row").append('<div id="content-inner"></div><div class="loading-bar" style="padding:20px;text-align:center;clear:both"></div>');
+
+            jQuery('.loading').fadeOut();
+        });
+
+        var baseUrl = jQuery('#baseUrl').val();
+        
+        var employees_alias = 'member/employees';
+        if (jQuery(location).attr('href').indexOf('staff') !== -1)
+            employees_alias = 'staff';
+        else if(jQuery(location).attr('href').indexOf('ansattoversikt') !== -1)
+            employees_alias = 'ansattoversikt';
+        
+        window.history.pushState("", "", baseUrl + "/" + employees_alias + "/" + departments + "/" + area_of_expertise + "/" + unit);
+        document.title = departments;
+        jQuery('h1#page-title').html(departments);
+        jQuery('#breadcrumb').html('<a href="'+ baseUrl +'">' + jQuery('#breadcrumb a:first').text() + '</a> <i>/</i> <a href="'+ baseUrl +'/' + employees_alias + '">' + jQuery('#breadcrumb_staff').val() + '</a> <i>/</i> <span class="breadcrumb-last">'+ departments +'</span>');        
+    };
+})(jQuery);
